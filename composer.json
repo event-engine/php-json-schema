@@ -1,6 +1,6 @@
 {
   "name": "event-engine/php-json-schema",
-  "description": "JSON Schema integration for Event Engine",
+  "description": "Event Engine JSON Schema PHP Package",
   "homepage": "https://event-engine.io/",
   "license": "MIT",
   "authors": [

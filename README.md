@@ -1,2 +1,3 @@
 # php-json-schema
-JSON Schema integration for Event Engine
+
+Event Engine JSON Schema PHP Package
