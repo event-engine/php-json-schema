@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 namespace EventEngine\JsonSchema;
 
-use EventEngine\JsonSchema\Exception\InvalidArgumentException;
+use EventEngine\JsonSchema\Exception\OpisJsonValidationError;
 use Opis\JsonSchema\Schema as OpisSchema;
 use Opis\JsonSchema\Validator;
 
@@ -38,21 +38,7 @@ class OpisJsonSchema extends AbstractJsonSchema
         $result = $this->jsonValidator()->schemaValidation($enforcedObjectData, OpisSchema::fromJsonString(\json_encode($jsonSchema)));
 
         if (! $result->isValid()) {
-            $errors = [];
-
-            foreach ($result->getErrors() as $error) {
-                $errors[] = \sprintf('[%s] %s', $error->keyword(), \json_encode($error->keywordArgs(), JSON_PRETTY_PRINT));
-
-                if ($error->subErrorsCount()) {
-                    foreach ($error->subErrors() as $subError) {
-                        $errors[] = \sprintf("[%s] %s\n", $subError->keyword(), \json_encode($subError->keywordArgs(), JSON_PRETTY_PRINT));
-                    }
-                }
-            }
-
-            throw new InvalidArgumentException(
-                "Validation of $objectName failed: " . \implode("\n", $errors)
-            );
+            throw OpisJsonValidationError::withError($objectName, ...$result->getErrors());
         }
     }
 
