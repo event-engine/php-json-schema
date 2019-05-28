@@ -14,6 +14,7 @@ namespace EventEngine\JsonSchema;
 use EventEngine\Data\ImmutableRecord;
 use EventEngine\Data\ImmutableRecordLogic;
 use EventEngine\JsonSchema\Exception\InvalidArgumentException;
+use EventEngine\JsonSchema\RecordLogic\TypeDetector;
 use EventEngine\Schema\TypeSchema;
 
 trait JsonSchemaAwareRecordLogic
@@ -28,6 +29,28 @@ trait JsonSchemaAwareRecordLogic
     public static function __schema(): TypeSchema
     {
         return self::generateSchemaFromPropTypeMap();
+    }
+
+    /**
+     * Override method to return a list property keys that are optional
+     *
+     * @return array
+     */
+    private static function __optionalProperties(): array
+    {
+        return [];
+    }
+
+    /**
+     * If a property type is a class and that class implements JsonSchemaAwareRecord the resulting JsonSchema
+     * for that type can either be a TypeRef (no nested schema allowed - default logic) or an object schema derived
+     * from JsonSchemaAwareRecord::__schema (enabled by returning true from the method)
+     *
+     * @return bool
+     */
+    private static function __allowNestedSchema(): bool
+    {
+        return false;
     }
 
     /**
@@ -70,12 +93,12 @@ trait JsonSchemaAwareRecordLogic
                     } elseif ($arrayItemType === ImmutableRecord::PHP_TYPE_ARRAY) {
                         throw new InvalidArgumentException("Array item type of property $prop must not be 'array', only a scalar type or an existing class can be used as array item type.");
                     } else {
-                        $arrayItemSchema = JsonSchema::typeRef(self::getTypeFromClass($arrayItemType));
+                        $arrayItemSchema = self::getTypeFromClass($arrayItemType);
                     }
 
                     $props[$prop] = JsonSchema::array($arrayItemSchema);
                 } else {
-                    $props[$prop] = JsonSchema::typeRef(self::getTypeFromClass($type));
+                    $props[$prop] = self::getTypeFromClass($type);
                 }
 
                 if ($isNullable) {
@@ -83,7 +106,13 @@ trait JsonSchemaAwareRecordLogic
                 }
             }
 
-            self::$__schema = JsonSchema::object($props);
+            $optionalProps = [];
+            foreach (self::__optionalProperties() as $optProp) {
+                $optionalProps[$optProp] = $props[$optProp];
+                unset($props[$optProp]);
+            }
+
+            self::$__schema = JsonSchema::object($props, $optionalProps);
         }
 
         return self::$__schema;
@@ -94,19 +123,9 @@ trait JsonSchemaAwareRecordLogic
         return \substr(\strrchr($class, '\\'), 1);
     }
 
-    private static function getTypeFromClass(string $classOrType): string
+    private static function getTypeFromClass(string $classOrType): Type
     {
-        if (! \class_exists($classOrType)) {
-            return $classOrType;
-        }
-
-        $refObj = new \ReflectionClass($classOrType);
-
-        if ($refObj->implementsInterface(ImmutableRecord::class)) {
-            return \call_user_func([$classOrType, '__type']);
-        }
-
-        return self::convertClassToTypeName($classOrType);
+        return TypeDetector::getTypeFromClass($classOrType, self::__allowNestedSchema());
     }
 
     /**
