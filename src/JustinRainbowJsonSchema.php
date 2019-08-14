@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 namespace EventEngine\JsonSchema;
 
-use EventEngine\JsonSchema\Exception\InvalidArgumentException;
+use EventEngine\JsonSchema\Exception\JustinRainbowJsonValidationError;
 use JsonSchema\Validator;
 
 final class JustinRainbowJsonSchema extends AbstractJsonSchema
@@ -31,16 +31,8 @@ final class JustinRainbowJsonSchema extends AbstractJsonSchema
 
         if (! $this->jsonValidator()->isValid()) {
             $errors = $this->jsonValidator()->getErrors();
-
             $this->jsonValidator()->reset();
-
-            foreach ($errors as $i => $error) {
-                $errors[$i] = \sprintf("[%s] %s\n", $error['property'], $error['message']);
-            }
-
-            throw new InvalidArgumentException(
-                "Validation of $objectName failed: " . \implode("\n", $errors)
-            );
+            throw JustinRainbowJsonValidationError::withError($objectName, ...$errors);
         }
 
         $this->jsonValidator()->reset();
