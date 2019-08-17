@@ -3,9 +3,17 @@ declare(strict_types=1);
 
 namespace EventEngineTest\JsonSchema\Stub\VoProp;
 
-final class Age
+use EventEngine\JsonSchema\ProvidesValidationRules;
+use EventEngine\JsonSchema\Type\IntType;
+
+final class Age implements ProvidesValidationRules
 {
     private $age;
+
+    public static function validationRules(): array
+    {
+        return [IntType::MINIMUM => 0, IntType::MAXIMUM => 150];
+    }
 
     public static function fromInt(int $age): self
     {
@@ -35,5 +43,4 @@ final class Age
     {
         return (string)$this->age;
     }
-
 }

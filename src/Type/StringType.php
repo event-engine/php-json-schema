@@ -19,6 +19,14 @@ class StringType implements AnnotatedType
     use NullableType,
         HasAnnotations;
 
+    public const PATTERN = 'pattern';
+    public const FORMAT = 'format';
+    public const MIN_LENGTH = 'minLength';
+    public const MAX_LENGTH = 'maxLength';
+    public const ENUM = 'enum';
+    public const CONST = 'const';
+
+
     private $type = JsonSchema::TYPE_STRING;
 
     /**
@@ -34,7 +42,15 @@ class StringType implements AnnotatedType
     public function withMinLength(int $minLength): self
     {
         $cp = clone $this;
-        $cp->validation['minLength'] = $minLength;
+        $cp->validation[self::MIN_LENGTH] = $minLength;
+
+        return $cp;
+    }
+
+    public function withMaxLength(int $maxLength): self
+    {
+        $cp = clone $this;
+        $cp->validation[self::MAX_LENGTH] = $maxLength;
 
         return $cp;
     }
@@ -42,7 +58,7 @@ class StringType implements AnnotatedType
     public function withPattern(string $pattern): self
     {
         $cp = clone $this;
-        $cp->validation['pattern'] = $pattern;
+        $cp->validation[self::PATTERN] = $pattern;
 
         return $cp;
     }

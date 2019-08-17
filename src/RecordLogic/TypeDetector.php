@@ -28,7 +28,8 @@ final class TypeDetector
         }
 
         if($refObj->implementsInterface(JsonSchemaAwareCollection::class)) {
-            return JsonSchema::array(\call_user_func([$classOrType, '__itemSchema']));
+            $validation = is_callable([$classOrType, 'validationRules'])? \call_user_func([$classOrType, 'validationRules']) : null;
+            return JsonSchema::array(\call_user_func([$classOrType, '__itemSchema']), $validation);
         }
 
         if($scalarSchemaType = self::determineScalarTypeIfPossible($classOrType)) {
@@ -41,15 +42,18 @@ final class TypeDetector
     private static function determineScalarTypeIfPossible(string $class): ?Type
     {
         if(is_callable([$class, 'fromString'])) {
-            return JsonSchema::string();
+            $validation = is_callable([$class, 'validationRules'])? \call_user_func([$class, 'validationRules']) : null;
+            return JsonSchema::string($validation);
         }
 
         if(is_callable([$class, 'fromInt'])) {
-            return JsonSchema::integer();
+            $validation = is_callable([$class, 'validationRules'])? \call_user_func([$class, 'validationRules']) : null;
+            return JsonSchema::integer($validation);
         }
 
         if(is_callable([$class, 'fromFloat'])) {
-            return JsonSchema::float();
+            $validation = is_callable([$class, 'validationRules'])? \call_user_func([$class, 'validationRules']) : null;
+            return JsonSchema::float($validation);
         }
 
         if(is_callable([$class, 'fromBool'])) {

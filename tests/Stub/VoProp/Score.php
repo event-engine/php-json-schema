@@ -3,9 +3,17 @@ declare(strict_types=1);
 
 namespace EventEngineTest\JsonSchema\Stub\VoProp;
 
-final class Score
+use EventEngine\JsonSchema\ProvidesValidationRules;
+use EventEngine\JsonSchema\Type\FloatType;
+
+final class Score implements ProvidesValidationRules
 {
     private $score;
+
+    public static function validationRules(): array
+    {
+        return [FloatType::MINIMUM => 0.1, FloatType::MAXIMUM => 1];
+    }
 
     public static function fromFloat(float $score): self
     {
@@ -35,5 +43,4 @@ final class Score
     {
         return (string)$this->score;
     }
-
 }

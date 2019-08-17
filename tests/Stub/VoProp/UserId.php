@@ -3,9 +3,18 @@ declare(strict_types=1);
 
 namespace EventEngineTest\JsonSchema\Stub\VoProp;
 
-final class UserId
+use EventEngine\JsonSchema\ProvidesValidationRules;
+
+final class UserId implements ProvidesValidationRules
 {
+    public const PATTERN = '^[0-9]+$';
+
     private $userId;
+
+    public static function validationRules(): array
+    {
+        return ['pattern' => self::PATTERN];
+    }
 
     public static function fromString(string $userId): self
     {

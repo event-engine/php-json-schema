@@ -19,6 +19,8 @@ final class BoolType implements AnnotatedType
     use NullableType,
         HasAnnotations;
 
+    public const CONST = 'const';
+
     /**
      * @var string|array
      */
