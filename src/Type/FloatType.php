@@ -19,6 +19,14 @@ class FloatType implements AnnotatedType
     use NullableType,
         HasAnnotations;
 
+    public const MINIMUM = 'minimum';
+    public const MAXIMUM = 'maximum';
+    public const MULTIPLE_OF = 'multipleOf';
+    public const EXCLUSIVE_MAXIMUM = 'exclusiveMaximum';
+    public const EXCLUSIVE_MINIMUM = 'exclusiveMinimum';
+    public const ENUM = 'enum';
+    public const CONST = 'const';
+
     /**
      * @var string|array
      */
@@ -45,7 +53,20 @@ class FloatType implements AnnotatedType
 
         $validation = (array) $this->validation;
 
-        $validation['minimum'] = $min;
+        $validation[self::MINIMUM] = $min;
+
+        $cp->validation = $validation;
+
+        return $cp;
+    }
+
+    public function withExclusiveMinimum(float $exclusiveMin): self
+    {
+        $cp = clone $this;
+
+        $validation = (array) $this->validation;
+
+        $validation[self::EXCLUSIVE_MINIMUM] = $exclusiveMin;
 
         $cp->validation = $validation;
 
@@ -58,7 +79,20 @@ class FloatType implements AnnotatedType
 
         $validation = (array) $this->validation;
 
-        $validation['maximum'] = $max;
+        $validation[self::MAXIMUM] = $max;
+
+        $cp->validation = $validation;
+
+        return $cp;
+    }
+
+    public function withExclusiveMaximum(float $exclusiveMax): self
+    {
+        $cp = clone $this;
+
+        $validation = (array) $this->validation;
+
+        $validation[self::EXCLUSIVE_MAXIMUM] = $exclusiveMax;
 
         $cp->validation = $validation;
 
@@ -71,8 +105,21 @@ class FloatType implements AnnotatedType
 
         $validation = (array) $this->validation;
 
-        $validation['minimum'] = $min;
-        $validation['maximum'] = $max;
+        $validation[self::MINIMUM] = $min;
+        $validation[self::MAXIMUM] = $max;
+
+        $cp->validation = $validation;
+
+        return $cp;
+    }
+
+    public function withMultipleOf(float $multipleOf): self
+    {
+        $cp = clone $this;
+
+        $validation = (array) $this->validation;
+
+        $validation[self::MULTIPLE_OF] = $multipleOf;
 
         $cp->validation = $validation;
 

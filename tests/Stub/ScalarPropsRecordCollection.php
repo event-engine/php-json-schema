@@ -5,14 +5,21 @@ namespace EventEngineTest\JsonSchema\Stub;
 
 use EventEngine\JsonSchema\JsonSchemaAwareCollection;
 use EventEngine\JsonSchema\JsonSchemaAwareCollectionLogic;
+use EventEngine\JsonSchema\ProvidesValidationRules;
+use EventEngine\JsonSchema\Type\ArrayType;
 
-final class ScalarPropsRecordCollection implements JsonSchemaAwareCollection
+final class ScalarPropsRecordCollection implements JsonSchemaAwareCollection, ProvidesValidationRules
 {
     use JsonSchemaAwareCollectionLogic;
 
     private static function __itemType(): ?string
     {
         return ScalarPropsRecord::class;
+    }
+
+    public static function validationRules(): array
+    {
+        return [ArrayType::MAX_ITEMS => 10];
     }
 
     /**

@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace EventEngineTest\JsonSchema;
 
 use EventEngine\JsonSchema\JsonSchema;
-use EventEngine\JsonSchema\Type\TypeRef;
 use EventEngineTest\JsonSchema\Stub\ArrayItemRecord;
 use EventEngineTest\JsonSchema\Stub\CollectionItemAllowNestedRecord;
 use EventEngineTest\JsonSchema\Stub\CollectionItemRecord;
@@ -13,6 +12,7 @@ use EventEngineTest\JsonSchema\Stub\NullableArrayItemRecordRecord;
 use EventEngineTest\JsonSchema\Stub\NullableScalarPropsRecord;
 use EventEngineTest\JsonSchema\Stub\ScalarPropsRecord;
 use EventEngineTest\JsonSchema\Stub\VoOptionalPropsRecord;
+use EventEngineTest\JsonSchema\Stub\VoProp\UserId;
 use EventEngineTest\JsonSchema\Stub\VoPropsRecord;
 
 final class JsonSchemaAwareRecordLogicTest extends BasicTestCase
@@ -100,7 +100,7 @@ final class JsonSchemaAwareRecordLogicTest extends BasicTestCase
         $schema = CollectionItemRecord::__schema();
 
         $expected = JsonSchema::object([
-            'friends' => JsonSchema::array(JsonSchema::typeRef(ScalarPropsRecord::__type()))
+            'friends' => JsonSchema::array(JsonSchema::typeRef(ScalarPropsRecord::__type()))->withMaxItems(10)
         ]);
 
         $this->assertEquals($expected->toArray(), $schema->toArray());
@@ -127,10 +127,10 @@ final class JsonSchemaAwareRecordLogicTest extends BasicTestCase
         $schema = VoPropsRecord::__schema();
 
         $expected = JsonSchema::object([
-            'userId' => JsonSchema::string(),
-            'age' => JsonSchema::integer(),
+            'userId' => JsonSchema::string()->withPattern(UserId::PATTERN),
+            'age' => JsonSchema::integer()->withRange(0, 150),
             'member' => JsonSchema::boolean(),
-            'score' => JsonSchema::float()
+            'score' => JsonSchema::float()->withRange(0.1, 1),
         ]);
 
         $this->assertEquals($expected->toArray(), $schema->toArray());
@@ -144,11 +144,11 @@ final class JsonSchemaAwareRecordLogicTest extends BasicTestCase
         $schema = VoOptionalPropsRecord::__schema();
 
         $expected = JsonSchema::object([
-            'userId' => JsonSchema::string(),
-            'age' => JsonSchema::integer(),
+            'userId' => JsonSchema::string()->withPattern(UserId::PATTERN),
+            'age' => JsonSchema::integer()->withRange(0, 150),
             'member' => JsonSchema::boolean(),
         ], [
-            'score' => JsonSchema::float()
+            'score' => JsonSchema::float()->withRange(0.1, 1),
         ]);
 
         $this->assertEquals($expected->toArray(), $schema->toArray());
