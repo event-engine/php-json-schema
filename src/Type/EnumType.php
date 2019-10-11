@@ -13,6 +13,7 @@ namespace EventEngine\JsonSchema\Type;
 
 use EventEngine\JsonSchema\AnnotatedType;
 use EventEngine\JsonSchema\JsonSchema;
+use EventEngine\JsonSchema\Type;
 
 class EnumType implements AnnotatedType
 {
@@ -40,5 +41,17 @@ class EnumType implements AnnotatedType
             'type' => $this->type,
             'enum' => $this->entries,
         ], $this->annotations());
+    }
+
+    public function asNullable(): Type
+    {
+        $cp = clone $this;
+
+        $this->assertTypeCanBeConvertedToNullableType($cp);
+
+        $cp->type = [$cp->type, JsonSchema::TYPE_NULL];
+        $cp->entries[] = null;
+
+        return $cp;
     }
 }
