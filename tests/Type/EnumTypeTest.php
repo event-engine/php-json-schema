@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace EventEngineTest\JsonSchema\Type;
 
+use EventEngine\JsonSchema\JsonSchema;
 use EventEngine\JsonSchema\Type\EnumType;
 use EventEngineTest\JsonSchema\BasicTestCase;
 
@@ -43,6 +44,41 @@ final class EnumTypeTest extends BasicTestCase
             [
                 'type' => ['string', 'null'],
                 'enum' => ['a', 'b', null]
+            ],
+            $enumType->toArray()
+        );
+    }
+
+
+    /**
+     * @test
+     */
+    public function it_creates_int_enum_type()
+    {
+        $enumType = JsonSchema::enum([0, 1], JsonSchema::TYPE_INT);
+
+        $this->assertEquals(
+            [
+                'type' => 'integer',
+                'enum' => [0, 1],
+            ],
+            $enumType->toArray()
+        );
+    }
+
+
+    /**
+     * @test
+     */
+    public function it_creates_int_nullable_enum_type()
+    {
+        $enumType = JsonSchema::enum([0, 1], JsonSchema::TYPE_INT)
+            ->asNullable();
+
+        $this->assertEquals(
+            [
+                'type' => ['integer', 'null'],
+                'enum' => [0, 1, null]
             ],
             $enumType->toArray()
         );

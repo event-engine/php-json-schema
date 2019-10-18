@@ -17,8 +17,10 @@ use EventEngine\JsonSchema\Type\BoolType;
 use EventEngine\JsonSchema\Type\EmailType;
 use EventEngine\JsonSchema\Type\EnumType;
 use EventEngine\JsonSchema\Type\FloatType;
+use EventEngine\JsonSchema\Type\IntEnumType;
 use EventEngine\JsonSchema\Type\IntType;
 use EventEngine\JsonSchema\Type\ObjectType;
+use EventEngine\JsonSchema\Type\StringEnumType;
 use EventEngine\JsonSchema\Type\StringType;
 use EventEngine\JsonSchema\Type\TypeRef;
 use EventEngine\JsonSchema\Type\UnionType;
@@ -105,9 +107,20 @@ final class JsonSchema
         return new BoolType();
     }
 
-    public static function enum(array $entries): EnumType
+    public static function enum(array $entries, string $type = JsonSchema::TYPE_STRING): EnumType
     {
-        return new EnumType(...$entries);
+        switch($type) {
+            case JsonSchema::TYPE_STRING:
+                $class = StringEnumType::class;
+                break;
+            case JsonSchema::TYPE_INT:
+                $class = IntEnumType::class;
+                break;
+            default:
+                $class = EnumType::class;
+        }
+
+        return new $class(...$entries);
     }
 
     public static function nullOr(Type $schema): Type

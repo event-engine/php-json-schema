@@ -23,12 +23,12 @@ class EnumType implements AnnotatedType
     /**
      * @var string|array
      */
-    private $type = JsonSchema::TYPE_STRING;
+    protected $type = JsonSchema::TYPE_STRING;
 
     /**
      * @var string[]
      */
-    private $entries;
+    protected $entries;
 
     public function __construct(string ...$entries)
     {
