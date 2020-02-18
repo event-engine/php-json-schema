@@ -23,7 +23,7 @@ final class ScalarPropsRecordAllowNestedCollection implements JsonSchemaAwareCol
     /**
      * @var ScalarPropsRecord[]
      */
-    private $items;
+    private array $items;
 
     public static function fromArray(array $items): self
     {

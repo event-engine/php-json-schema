@@ -18,7 +18,7 @@ final class ArrayItemRecord implements JsonSchemaAwareRecord
     /**
      * @var string[]
      */
-    private $friends;
+    private array $friends;
 
     /**
      * @return string[]

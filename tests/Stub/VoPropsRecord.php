@@ -19,53 +19,29 @@ final class VoPropsRecord implements JsonSchemaAwareRecord
     public const MEMBER = 'member';
     public const SCORE = 'score';
 
-    /**
-     * @var UserId
-     */
-    private $userId;
+    private UserId $userId;
 
-    /**
-     * @var Age
-     */
-    private $age;
+    private Age $age;
 
-    /**
-     * @var Member
-     */
-    private $member;
+    private Member $member;
 
-    /**
-     * @var Score
-     */
-    private $score;
+    private Score $score;
 
-    /**
-     * @return UserId
-     */
     public function userId(): UserId
     {
         return $this->userId;
     }
 
-    /**
-     * @return Age
-     */
     public function age(): Age
     {
         return $this->age;
     }
 
-    /**
-     * @return Member
-     */
     public function member(): Member
     {
         return $this->member;
     }
 
-    /**
-     * @return Score
-     */
     public function score(): Score
     {
         return $this->score;

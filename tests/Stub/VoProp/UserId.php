@@ -9,7 +9,7 @@ final class UserId implements ProvidesValidationRules
 {
     public const PATTERN = '^[0-9]+$';
 
-    private $userId;
+    private string $userId;
 
     public static function validationRules(): array
     {

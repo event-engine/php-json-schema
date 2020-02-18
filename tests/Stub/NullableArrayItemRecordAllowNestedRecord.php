@@ -24,7 +24,7 @@ final class NullableArrayItemRecordAllowNestedRecord implements JsonSchemaAwareR
     /**
      * @var ScalarPropsRecord[]|null
      */
-    private $friends;
+    private ?array $friends;
 
     /**
      * @return ScalarPropsRecord[]|null

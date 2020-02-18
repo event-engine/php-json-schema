@@ -10,14 +10,8 @@ final class CollectionItemRecord implements JsonSchemaAwareRecord
 {
     use JsonSchemaAwareRecordLogic;
 
-    /**
-     * @var ScalarPropsRecordCollection
-     */
-    private $friends;
+    private ScalarPropsRecordCollection $friends;
 
-    /**
-     * @return ScalarPropsRecordCollection
-     */
     public function friends(): ScalarPropsRecordCollection
     {
         return $this->friends;

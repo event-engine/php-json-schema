@@ -10,53 +10,29 @@ final class NullableScalarPropsRecord implements JsonSchemaAwareRecord
 {
     use JsonSchemaAwareRecordLogic;
 
-    /**
-     * @var string|null
-     */
-    private $userId;
+    private ?string $userId;
 
-    /**
-     * @var int|null
-     */
-    private $age;
+    private ?int $age;
 
-    /**
-     * @var bool|null
-     */
-    private $member;
+    private ?bool $member;
 
-    /**
-     * @var float|null
-     */
-    private $score;
+    private ?float $score;
 
-    /**
-     * @return string|null
-     */
     public function userId(): ?string
     {
         return $this->userId;
     }
 
-    /**
-     * @return int|null
-     */
     public function age(): ?int
     {
         return $this->age;
     }
 
-    /**
-     * @return bool|null
-     */
     public function member(): ?bool
     {
         return $this->member;
     }
 
-    /**
-     * @return float|null
-     */
     public function score(): ?float
     {
         return $this->score;
