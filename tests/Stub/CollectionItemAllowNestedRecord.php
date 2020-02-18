@@ -10,14 +10,8 @@ final class CollectionItemAllowNestedRecord implements JsonSchemaAwareRecord
 {
     use JsonSchemaAwareRecordLogic;
 
-    /**
-     * @var ScalarPropsRecordAllowNestedCollection
-     */
-    private $friends;
+    private ScalarPropsRecordAllowNestedCollection $friends;
 
-    /**
-     * @return ScalarPropsRecordAllowNestedCollection
-     */
     public function friends(): ScalarPropsRecordAllowNestedCollection
     {
         return $this->friends;

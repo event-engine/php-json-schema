@@ -5,7 +5,7 @@ namespace EventEngineTest\JsonSchema\Stub\VoProp;
 
 final class Member
 {
-    private $flag;
+    private bool $flag;
 
     public static function fromBool(bool $flag): self
     {

@@ -8,7 +8,7 @@ use EventEngine\JsonSchema\Type\FloatType;
 
 final class Score implements ProvidesValidationRules
 {
-    private $score;
+    private float $score;
 
     public static function validationRules(): array
     {

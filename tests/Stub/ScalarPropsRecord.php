@@ -10,53 +10,29 @@ final class ScalarPropsRecord implements JsonSchemaAwareRecord
 {
     use JsonSchemaAwareRecordLogic;
 
-    /**
-     * @var string
-     */
-    private $userId;
+    private string $userId;
 
-    /**
-     * @var int
-     */
-    private $age;
+    private int $age;
 
-    /**
-     * @var bool
-     */
-    private $member;
+    private bool $member;
 
-    /**
-     * @var float
-     */
-    private $score;
+    private float $score;
 
-    /**
-     * @return string
-     */
     public function userId(): string
     {
         return $this->userId;
     }
 
-    /**
-     * @return int
-     */
     public function age(): int
     {
         return $this->age;
     }
 
-    /**
-     * @return bool
-     */
     public function member(): bool
     {
         return $this->member;
     }
 
-    /**
-     * @return float
-     */
     public function score(): float
     {
         return $this->score;

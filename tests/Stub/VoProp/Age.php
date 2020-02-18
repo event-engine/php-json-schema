@@ -8,7 +8,7 @@ use EventEngine\JsonSchema\Type\IntType;
 
 final class Age implements ProvidesValidationRules
 {
-    private $age;
+    private int $age;
 
     public static function validationRules(): array
     {
