@@ -23,6 +23,16 @@ trait HasAnnotations
      */
     protected $description;
 
+    /**
+     * @var mixed
+     */
+    protected $default;
+
+    /**
+     * @var array<mixed>
+     */
+    protected $examples;
+
     public function entitled(string $title): self
     {
         $cp = clone $this;
@@ -51,6 +61,43 @@ trait HasAnnotations
         return $this->description;
     }
 
+    /**
+     * @param mixed $default
+     */
+    public function withDefault($default): self
+    {
+        $cp = clone $this;
+
+        $cp->default = $default;
+
+        return $cp;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function defaultValue()
+    {
+        return $this->default;
+    }
+
+    public function withExamples(...$examples): self
+    {
+        $cp = clone $this;
+
+        $cp->examples = $examples;
+
+        return $cp;
+    }
+
+    /**
+     * @return array<mixed>
+     */
+    public function examples(): array
+    {
+        return $this->examples;
+    }
+
     public function annotations(): array
     {
         $annotations = [];
@@ -61,6 +108,14 @@ trait HasAnnotations
 
         if (null !== $this->description) {
             $annotations['description'] = $this->description;
+        }
+
+        if (null !== $this->default) {
+            $annotations['default'] = $this->default;
+        }
+
+        if (null !== $this->examples) {
+            $annotations['examples'] = $this->examples;
         }
 
         return $annotations;
