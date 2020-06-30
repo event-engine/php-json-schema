@@ -16,4 +16,8 @@ interface AnnotatedType extends Type
     public function entitled(string $title);
 
     public function describedAs(string $description);
+
+    public function withDefault($default);
+
+    public function withExamples(...$examples);
 }
