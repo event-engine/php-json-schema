@@ -25,6 +25,8 @@ use EventEngine\Schema\ResponseTypeSchema;
 use EventEngine\Schema\Schema;
 use EventEngine\Schema\TypeSchemaMap;
 use EventEngine\Util\VariableType;
+use function array_key_exists;
+use function explode;
 
 abstract class AbstractJsonSchema implements Schema
 {
@@ -34,7 +36,7 @@ abstract class AbstractJsonSchema implements Schema
     {
         $this->assertPayloadSchema($messageName, $payloadSchema);
 
-        $payloadSchemaArr = array_merge($payloadSchema->toArray(), [JsonSchema::DEFINITIONS => $typeSchemaMap->toArray()]);
+        $payloadSchemaArr = array_merge($payloadSchema->toArray(), [JsonSchema::DEFINITIONS => $this->convertTypeSchemaMapToDefinitions($typeSchemaMap)]);
 
         $this->assert("$messageName payload", $payload, $payloadSchemaArr);
     }
@@ -123,7 +125,26 @@ abstract class AbstractJsonSchema implements Schema
                 'events' => $eventSchemas,
                 'queries' => $querySchemas,
             ],
-            'definitions' => $typeSchemaMap->toArray(),
+            'definitions' => $this->convertTypeSchemaMapToDefinitions($typeSchemaMap),
         ];
+    }
+
+    private function convertTypeSchemaMapToDefinitions(TypeSchemaMap $typeSchemaMap): array
+    {
+        $definitions = [];
+
+        foreach ($typeSchemaMap->toArray() as $jsonPointer => $typeSchema) {
+            $temp = &$definitions;
+            foreach(explode("/", $jsonPointer) as $key) {
+                if(!array_key_exists($key, $temp)) {
+                    $temp[$key] = [];
+                }
+                $temp = &$temp[$key];
+            }
+            $temp = $typeSchema;
+            unset($temp);
+        }
+
+        return $definitions;
     }
 }
