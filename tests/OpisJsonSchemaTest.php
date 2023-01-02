@@ -84,9 +84,15 @@ JSON;
         $data['unknown'] = 'set';
 
         $expectedMessage = <<<'Msg'
-Validation of "myObject" failed: [additionalProperties] []
-field "unknown" [$schema] {
-    "schema": false
+Validation of "myObject" failed: {
+    "valid": false,
+    "errors": [
+        {
+            "keywordLocation": "#\/additionalProperties",
+            "instanceLocation": "#",
+            "error": "Additional object properties are not allowed: unknown"
+        }
+    ]
 }
 Msg;
 
@@ -108,8 +114,20 @@ Msg;
         $data['subObject']['unknown'] = 'set';
 
         $expectedMessage = <<<'Msg'
-Validation of "myObject" failed: field "subObject" [required] {
-    "missing": "p1"
+Validation of "myObject" failed: {
+    "valid": false,
+    "errors": [
+        {
+            "keywordLocation": "#\/properties",
+            "instanceLocation": "#",
+            "error": "The properties must match schema: subObject"
+        },
+        {
+            "keywordLocation": "#\/properties\/subObject\/required",
+            "instanceLocation": "#\/subObject",
+            "error": "The required properties (p1) are missing"
+        }
+    ]
 }
 Msg;
 

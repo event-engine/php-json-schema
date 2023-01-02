@@ -12,7 +12,7 @@ declare(strict_types=1);
 namespace EventEngine\JsonSchema;
 
 use EventEngine\JsonSchema\Exception\OpisJsonValidationError;
-use Opis\JsonSchema\Schema as OpisSchema;
+use Opis\JsonSchema\Helper as OpisHelper;
 use Opis\JsonSchema\Validator;
 
 class OpisJsonSchema extends AbstractJsonSchema
@@ -35,10 +35,14 @@ class OpisJsonSchema extends AbstractJsonSchema
 
         $enforcedObjectData = \json_decode(\json_encode($data));
 
-        $result = $this->jsonValidator()->schemaValidation($enforcedObjectData, OpisSchema::fromJsonString(\json_encode($jsonSchema)));
+        $schema = $this->jsonValidator()
+            ->loader()
+            ->loadObjectSchema(OpisHelper::toJSON($jsonSchema));
+
+        $result = $this->jsonValidator()->validate($enforcedObjectData, $schema);
 
         if (! $result->isValid()) {
-            throw OpisJsonValidationError::withError($objectName, ...$result->getErrors());
+            throw OpisJsonValidationError::withError($objectName, $result->error());
         }
     }
 

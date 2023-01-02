@@ -12,14 +12,16 @@ declare(strict_types=1);
 namespace EventEngine\JsonSchema\Exception;
 
 
-use Opis\JsonSchema\ValidationError;
+use Opis\JsonSchema\Errors\ErrorFormatter;
+use Opis\JsonSchema\Errors\ValidationError;
 
 class OpisJsonValidationError extends JsonValidationError
 {
     /**
      * @var ValidationError[]
      */
-    private $errors;
+    private array $errors;
+    private ?ErrorFormatter $errorFormatter = null;
 
     public static function withError(string $objectName, ValidationError ...$validationErrors): OpisJsonValidationError
     {
@@ -28,15 +30,6 @@ class OpisJsonValidationError extends JsonValidationError
 
         foreach ($validationErrors as $error) {
             $self->message .= $self->errorMessage($error);
-
-            if ($error->subErrorsCount()) {
-                $self->message .= \array_reduce(
-                    $error->subErrors(),
-                    static function ($message, ValidationError $error) use ($self) {
-                        return $message . "\n" . $self->errorMessage($error);
-                    }
-                );
-            }
         }
 
         return $self;
@@ -50,18 +43,13 @@ class OpisJsonValidationError extends JsonValidationError
         return $this->errors;
     }
 
+    private function errorFormatter(): ErrorFormatter
+    {
+        return $this->errorFormatter ??= new ErrorFormatter();
+    }
+
     private function errorMessage(ValidationError $error): string
     {
-        $dataPointer = $error->dataPointer();
-
-        if (count($dataPointer) === 0) {
-            return \sprintf('[%s] %s', $error->keyword(), \json_encode($error->keywordArgs(), JSON_PRETTY_PRINT));
-        }
-
-        return \sprintf('field "%s" [%s] %s',
-            implode('.', $dataPointer),
-            $error->keyword(),
-            \json_encode($error->keywordArgs(), JSON_PRETTY_PRINT)
-        );
+        return json_encode($this->errorFormatter()->formatOutput($error, "basic"), JSON_PRETTY_PRINT);
     }
 }

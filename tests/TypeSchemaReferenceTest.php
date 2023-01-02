@@ -94,9 +94,30 @@ final class TypeSchemaReferenceTest extends BasicTestCase
         $data['subObject']['p1'] = 'to';
 
         $expectedMessage = <<<'Msg'
-        Validation of "TestMessage payload" failed: field "subObject.p1" [minLength] {
-            "min": 3,
-            "length": 2
+        Validation of "TestMessage payload" failed: {
+            "valid": false,
+            "errors": [
+                {
+                    "keywordLocation": "#\/properties",
+                    "instanceLocation": "#",
+                    "error": "The properties must match schema: subObject"
+                },
+                {
+                    "keywordLocation": "#\/properties\/subObject\/properties",
+                    "instanceLocation": "#\/subObject",
+                    "error": "The properties must match schema: p1"
+                },
+                {
+                    "keywordLocation": "#\/properties\/subObject\/properties\/p1\/%24ref",
+                    "instanceLocation": "#\/subObject\/p1",
+                    "error": "The data must match $ref"
+                },
+                {
+                    "keywordLocation": "#\/definitions\/SubObject\/P1\/minLength",
+                    "instanceLocation": "#\/subObject\/p1",
+                    "error": "Minimum string length is 3, found 2"
+                }
+            ]
         }
         Msg;
 
