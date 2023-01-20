@@ -129,7 +129,7 @@ trait JsonSchemaAwareRecordLogic
     }
 
     /**
-     * @var array
+     * @var TypeSchema
      */
     private static $__schema;
 }
