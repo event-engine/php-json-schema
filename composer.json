@@ -19,7 +19,7 @@
         "php": "^8.1",
         "ext-json": "*",
         "event-engine/php-data": "^2.0.1",
-        "event-engine/php-engine-utils": "^0.2.1",
+        "event-engine/php-engine-utils": "^0.2.1 || ^1.0",
         "event-engine/php-schema": "^0.2 || ^0.3",
         "ramsey/uuid": "^3.6 || ^4.0"
     },
