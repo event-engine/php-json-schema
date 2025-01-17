@@ -72,12 +72,12 @@ final class JsonSchema
         return new ObjectType($requiredProps, $optionalProps, $additionalProperties);
     }
 
-    public static function array(Type $itemSchema, array $validation = null): ArrayType
+    public static function array(Type $itemSchema, ?array $validation = null): ArrayType
     {
         return new ArrayType($itemSchema, $validation);
     }
 
-    public static function string(array $validation = null): StringType
+    public static function string(?array $validation = null): StringType
     {
         return new StringType($validation);
     }
@@ -92,12 +92,12 @@ final class JsonSchema
         return new UuidType();
     }
 
-    public static function integer(array $validation = null): IntType
+    public static function integer(?array $validation = null): IntType
     {
         return new IntType($validation);
     }
 
-    public static function float(array $validation = null): FloatType
+    public static function float(?array $validation = null): FloatType
     {
         return new FloatType($validation);
     }

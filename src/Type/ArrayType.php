@@ -42,7 +42,7 @@ final class ArrayType implements AnnotatedType, PayloadSchema
      */
     private $validation;
 
-    public function __construct(TypeSchema $itemSchema, array $validation = null)
+    public function __construct(TypeSchema $itemSchema, ?array $validation = null)
     {
         $this->itemSchema = $itemSchema;
         $this->validation = $validation;

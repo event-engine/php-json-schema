@@ -37,7 +37,7 @@ class FloatType implements AnnotatedType
      */
     private $validation;
 
-    public function __construct(array $validation = null)
+    public function __construct(?array $validation = null)
     {
         $this->validation = $validation;
     }
