@@ -140,4 +140,24 @@ Msg;
             $this->assertStringStartsWith($expectedMessage, $e->getMessage());
         }
     }
+
+    /**
+     * @test
+     */
+    public function it_does_not_retain_memory_between_validations(): void
+    {
+        $cut = new OpisJsonSchema();
+        $cut->assert('myObject', $this->validData(), $this->schema());
+
+        \gc_collect_cycles();
+        $baseline = \memory_get_usage();
+
+        for ($i = 0; $i < 5000; $i++) {
+            $cut->assert('myObject', $this->validData(), $this->schema());
+        }
+
+        \gc_collect_cycles();
+
+        $this->assertLessThan(1024 * 1024, \memory_get_usage() - $baseline);
+    }
 }

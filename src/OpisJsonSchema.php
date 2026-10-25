@@ -35,14 +35,20 @@ class OpisJsonSchema extends AbstractJsonSchema
 
         $enforcedObjectData = \json_decode(\json_encode($data));
 
-        $schema = $this->jsonValidator()
-            ->loader()
-            ->loadObjectSchema(OpisHelper::toJSON($jsonSchema));
+        $loader = $this->jsonValidator()->loader();
 
-        $result = $this->jsonValidator()->validate($enforcedObjectData, $schema);
+        try {
+            $schema = $loader->loadObjectSchema(OpisHelper::toJSON($jsonSchema));
 
-        if (! $result->isValid()) {
-            throw OpisJsonValidationError::withError($objectName, $result->error());
+            $result = $this->jsonValidator()->validate($enforcedObjectData, $schema);
+
+            if (! $result->isValid()) {
+                throw OpisJsonValidationError::withError($objectName, $result->error());
+            }
+        } finally {
+            // The loader caches every schema object it loads. Each call passes a new object,
+            // so the cache never hits and would only grow for the lifetime of the process.
+            $loader->clearCache();
         }
     }
 
